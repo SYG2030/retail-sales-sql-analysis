@@ -120,4 +120,110 @@ The executed query returned the following results:
 | Omar | 1 | 1,300.00 |
 | Lina | 1 | 300.00 |
 
-Sara was the highest-spending customer in the dataset, contributing 8,330.00 in completed revenue
+Sara was the highest-spending customer in the dataset, contributing 8,330.00 in completed revenue.
+
+Customer spending is calculated from completed orders only.
+
+### 5.6 Customers Without Orders
+
+The query identified the following customer without any orders:
+
+| Customer ID | Customer Name |
+|---|---|
+| 3 | Nora |
+
+The `NOT EXISTS` subquery was used to identify customers without matching orders.
+
+### 5.7 Average Order Value
+
+| Metric | Result |
+|---|---:|
+| Completed orders | 8 |
+| Total completed revenue | 13,240.00 |
+| Average order value | 1,655.00 |
+
+The average was calculated from order-level totals rather than individual order-item rows.
+
+### 5.8 Products Without Completed Sales
+
+The query returned no rows when searching for products without sales from completed orders.
+
+This means every product in the current dataset had at least one sale associated with a completed order. Products appearing only in cancelled orders would still be identified by this check if they had no completed sales.
+
+### 5.9 Orders Above Average Order Value
+
+The query identified these completed orders with a value above the average order value of 1,655.00:
+
+| Order ID | Order Value |
+|---|---:|
+| 1009 | 3,940.00 |
+| 1001 | 3,660.00 |
+| 1007 | 1,800.00 |
+
+These orders contributed more revenue per order than the dataset's average completed order.
+
+### 5.10 Data-Quality Checks
+
+The following checks were executed:
+
+| Check | Result | Interpretation |
+|---|---|---|
+| Customers with missing region | 1 customer: Lina | Region information is incomplete for one record. |
+| Duplicate order-item IDs | No rows returned | No duplicate IDs were found by this query. |
+| Orders without order items | No rows returned | Every order currently has at least one matching order-item record. |
+| Revenue by order status | Completed: 8 orders, 13,240.00; Cancelled: 1 order, 3,500.00 | Cancelled revenue is kept separate from completed revenue. |
+
+The duplicate-ID query returned no matches. Since `OrderItemID` is a primary key in the database schema, the database constraint prevents duplicate values from being inserted through normal operations.
+
+The missing region should be investigated before using customer-region analysis for business decisions. A missing value should not automatically be replaced with an assumed region.
+
+## 6. SQL Concepts Demonstrated
+
+This project demonstrates practical use of:
+
+- `SELECT` and column aliases
+- `WHERE` filtering
+- Aggregate functions such as `SUM`, `COUNT`, and `AVG`
+- `GROUP BY` and `ORDER BY`
+- `INNER JOIN` and `LEFT JOIN`
+- `HAVING`
+- Common Table Expressions (CTEs)
+- Subqueries
+- `DATEFROMPARTS`, `YEAR`, and `MONTH`
+- `TOP`
+- `IS NULL`
+- Data-quality checks
+- Revenue calculations and order-level aggregation
+
+## 7. Limitations
+
+- The dataset is fictional and small; it does not represent actual company performance.
+- The analysis measures revenue, not profit, because product costs and operating expenses are unavailable.
+- No customer demographics or marketing data are available to explain customer behavior.
+- The dataset covers only a short period, so it is insufficient for reliable seasonality analysis.
+- A missing customer region may limit geographic comparisons.
+- Revenue findings depend on the documented rule that cancelled orders are excluded from completed revenue.
+
+## 8. Conclusion
+
+The SQL analysis identified the main revenue contributors, summarized monthly performance, ranked products and customers, and checked for selected data-quality issues.
+
+The most notable findings were that Electronics generated the highest category revenue, the Laptop was the top product by revenue, and Sara was the highest-spending customer. The analysis also identified one customer with a missing region and one customer without orders.
+
+These results demonstrate how SQL can transform relational data into structured business information. Any recommendations based on this analysis should account for the dataset's fictional nature and limitations.
+
+## 9. Reproducibility
+
+The results were obtained by executing queries against the `RetailSalesPractice` database in SQL Server Management Studio (SSMS).
+
+To reproduce the analysis:
+
+1. Run [`database/01_create_database.sql`](../database/01_create_database.sql) to create and populate the practice database.
+2. Open [`queries/01_analysis_queries.sql`](../queries/01_analysis_queries.sql) in SSMS.
+3. Select the `RetailSalesPractice` database and execute the queries.
+4. Compare the returned results with the findings documented above.
+5. Revalidate the results if the dataset or business rules change.
+
+**Important:** The database creation script drops and recreates the project tables when rerun. Running it again will reset the data in those tables.
+
+Only results that have been executed and validated should be presented as findings.
