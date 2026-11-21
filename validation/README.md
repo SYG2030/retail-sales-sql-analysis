@@ -1,14 +1,12 @@
 # Data Validation
 
-This directory contains independent validation
-checks used to verify the accuracy and consistency
-of the retail sales analysis results.
+This directory contains SQL validation checks used to assess the consistency, integrity, and quality of the retail sales analysis results.
 
 Validation focuses on:
 - Revenue reconciliation
 - Order-level calculations
 - Metric consistency
+- Referential integrity audits
 - Data quality checks
 
-All validation results must be reproducible
-and traceable to the source data.
+The validation results are reproducible and traceable to the source data. Some checks use fixed reference values or compare aggregations of the same underlying data; therefore, they should not be interpreted as fully independent verification.
