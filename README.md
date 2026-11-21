@@ -1,27 +1,37 @@
-# Retail Sales SQL Analysis
+# Retail Sales Analytics | SQL Server & AI-Assisted Business Reporting
 
 ## Project Overview
 
-This project uses Microsoft SQL Server and T-SQL to analyze a fictional retail dataset and answer business questions about sales revenue, products, customers, and order behavior.
+This project demonstrates an end-to-end analytical workflow using Microsoft SQL Server, T-SQL, and AI-assisted business reporting.
 
-The analysis covers monthly revenue, product and category performance, customer spending, average order value (AOV), and data-quality checks.
+A fictional retail dataset is analyzed to extract business insights related to sales revenue, products, customers, and order behavior. The validated SQL findings are then transformed into a structured management report using Claude, followed by human review to ensure accuracy and avoid unsupported conclusions.
 
-## Objectives
+The project combines relational database analysis, data-quality validation, business interpretation, and professional reporting.
+
+**Important:** The dataset is fictional and small. It does not represent actual company performance. All monetary values are in an unspecified currency.
+
+## Project Objectives
 
 - Calculate completed sales revenue and order counts.
 - Analyze revenue by month and product category.
 - Identify top-performing products and highest-spending customers.
 - Find customers without orders and products without completed sales.
-- Calculate average order value (AOV).
+- Calculate Average Order Value (AOV).
 - Identify completed orders with values above the average.
-- Check for missing customer information, duplicate order-item IDs, and orders without order items.
+- Perform data-quality and validation checks.
+- Use AI to transform validated findings into a management-ready report.
+- Review AI-generated content for numerical accuracy and unsupported assumptions.
 
-## Tools and Technologies
+## Tools & Technologies
 
-- Microsoft SQL Server
-- SQL Server Management Studio (SSMS)
-- T-SQL
-- Git and GitHub
+| Tool / Technology | Purpose |
+|---|---|
+| Microsoft SQL Server | Relational database management |
+| SQL Server Management Studio (SSMS) | SQL development and execution |
+| T-SQL | Data analysis and validation queries |
+| Claude | AI-assisted business reporting |
+| Git & GitHub | Version control and project documentation |
+| Markdown & PDF | Reporting and presentation |
 
 ## Data Model
 
@@ -29,16 +39,16 @@ The `RetailSalesPractice` database contains four tables:
 
 | Table | Description |
 |---|---|
-| `Customers` | Customer details, including name and region. |
-| `Products` | Product names, categories, and unit prices. |
-| `Orders` | Order details, including customer, date, and status. |
-| `OrderItems` | Product lines within orders, including quantity and unit price. |
+| Customers | Customer details, including name and region. |
+| Products | Product names, categories, and unit prices. |
+| Orders | Order details, including customer, date, and status. |
+| OrderItems | Product lines within orders, including quantity and unit price. |
 
 The tables are connected through primary and foreign keys.
 
-## Business Rules and Metric Definitions
+## Business Rules & Metric Definitions
 
-- **Revenue:** Calculated at the order-item level as `Quantity * UnitPrice`.
+- **Revenue:** Calculated at the order-item level as `Quantity × UnitPrice`.
 - **Completed Revenue:** Includes only orders with a `Completed` status. Cancelled orders are excluded.
 - **Completed Orders:** Each completed order is counted once, regardless of how many product lines it contains.
 - **Average Order Value (AOV):** Total completed revenue divided by the number of completed orders. Order-level totals are calculated before averaging.
@@ -52,11 +62,11 @@ The following results were obtained by executing the analysis queries against th
 
 | Metric | Result |
 |---|---:|
-| Completed orders | 8 |
-| Completed revenue | 13,240.00 |
-| Average order value | 1,655.00 |
-| Cancelled orders | 1 |
-| Cancelled order value | 3,500.00 |
+| Completed Orders | 8 |
+| Completed Revenue | 13,240.00 |
+| Average Order Value | 1,655.00 |
+| Cancelled Orders | 1 |
+| Cancelled Order Value | 3,500.00 |
 
 Cancelled order value is reported separately and excluded from completed revenue.
 
@@ -115,14 +125,59 @@ Three completed orders exceeded the AOV of 1,655.00:
 | 1001 | 3,660.00 |
 | 1007 | 1,800.00 |
 
-### Data-Quality Checks
+## Data Quality & Validation
+
+The project includes data-quality checks and six SQL validation checks.
+
+### Data-Quality Findings
 
 - **Customers without orders:** Nora was identified as having no orders.
 - **Missing customer region:** Lina's region is missing.
 - **Duplicate order-item IDs:** No duplicate IDs were returned by the query.
 - **Orders without order items:** No orders without matching order-item records were found.
 - **Products without completed sales:** No products met this condition in the current dataset.
-- **Revenue validation:** Completed revenue matched the sum of revenue across product categories, with a difference of 0.00.
+
+### SQL Validation Summary
+
+| ID | Validation Check | Result |
+|---|---|---|
+| V01 | Revenue Reconciliation | PASS — difference of 0.00 |
+| V02 | Order-Level Revenue Validation | PASS — 8 orders, 13,240.00 |
+| V03 | Average Order Value Verification | PASS — 1,655.00 |
+| V04 | Cancelled Orders Exclusion | PASS — completed and cancelled revenue reported separately |
+| V05 | Referential Integrity Audit | 0 orphan records |
+| V06 | Data Quality Checks | 1 missing-region exception |
+
+**Validation note:** V01 compares two aggregations of the same underlying data. V02, V03, and V04 compare recalculated results against fixed reference values. These checks support consistency and regression verification, but are not fully independent verification of the source data. V05 audits existing records and does not test foreign-key enforcement for future inserts.
+
+The missing customer region is a data-quality exception, not a SQL execution failure.
+
+## AI-Assisted Business Reporting
+
+After completing and validating the SQL analysis, Claude was used to transform the documented findings into a structured management report.
+
+The reporting workflow included:
+
+1. Preparing a consolidated source file containing validated metrics, business definitions, findings, and limitations.
+2. Designing a structured reporting prompt with accuracy and content-integrity requirements.
+3. Using Claude to generate the initial management report.
+4. Reviewing and refining the AI-generated content to remove unsupported interpretations and preserve analytical accuracy.
+5. Producing a professionally formatted PDF report with KPI cards, charts, validation results, and business recommendations.
+
+### Final Management Report
+
+**[View the Retail Sales Management Report (PDF)](reporting/Retail_Sales_Management_Report.pdf)**
+
+The report includes:
+
+- Executive Summary and KPI overview.
+- Sales performance and monthly revenue analysis.
+- Product, category, and customer analysis.
+- SQL validation results and data-quality observations.
+- Evidence-based business recommendations.
+- Dataset limitations and AI output review notes.
+
+The AI-assisted report is based on validated project findings and underwent human review before publication.
 
 ## SQL Concepts Demonstrated
 
@@ -134,25 +189,33 @@ Three completed orders exceeded the AOV of 1,655.00:
 - Conditional analysis of order statuses.
 - Data-quality checks and validation queries.
 
-## Limitations
-
-- The dataset is fictional and small; it does not represent actual company performance.
-- The analysis measures revenue, not profit. Product costs and operating expenses are unavailable.
-- Customer demographics and marketing data are not included.
-- The dataset covers only five months, which is insufficient for reliable seasonality analysis.
-- Missing customer-region information may limit geographic analysis.
-- Findings depend on the documented rule that cancelled orders are excluded from completed revenue.
-
 ## Project Structure
 
 ```text
 retail-sales-sql-analysis/
+│
 ├── database/
 │   └── 01_create_database.sql
+│
 ├── queries/
 │   └── 01_analysis_queries.sql
+│
 ├── results/
 │   └── validated_findings.md
+│
+├── validation/
+│   └── README.md
+│
+├── reporting/
+│   ├── README.md
+│   ├── validated_analysis.md
+│   ├── reporting_prompt.md
+│   ├── management_report_draft.md
+│   └── Retail_Sales_Management_Report.pdf
+│
+├── docs/
+│   └── README.md
+│
 └── README.md
 ```
 
@@ -162,18 +225,36 @@ retail-sales-sql-analysis/
 2. Execute the script to create and populate the `RetailSalesPractice` database.
 3. Open `queries/01_analysis_queries.sql`.
 4. Execute the analysis queries against the `RetailSalesPractice` database.
-5. Compare the query outputs with the findings in this README and [`results/validated_findings.md`](results/validated_findings.md).
+5. Compare the query outputs with the findings in this README and `results/validated_findings.md`.
 
 **Note:** The database creation script drops and recreates the project tables when rerun. Running it again will reset the data in those tables.
 
 Recheck the findings whenever the underlying data or business rules change.
 
-## Detailed Results
+## Detailed Documentation
 
-For the metric definitions, validation details, and full findings, see [`results/validated_findings.md`](results/validated_findings.md).
+For additional project details, refer to:
+
+- [`results/validated_findings.md`](results/validated_findings.md) — Original analysis findings.
+- [`validation/README.md`](validation/README.md) — SQL validation documentation.
+- [`reporting/README.md`](reporting/README.md) — AI-assisted reporting workflow and deliverables.
+- [`reporting/validated_analysis.md`](reporting/validated_analysis.md) — Consolidated source of truth for reporting.
+- [`reporting/reporting_prompt.md`](reporting/reporting_prompt.md) — Prompt used for AI-assisted report generation.
+
+## Limitations
+
+- The dataset is fictional and small; it does not represent actual company performance.
+- The analysis measures revenue, not profit. Product costs and operating expenses are unavailable.
+- Customer demographics and marketing data are not included.
+- The dataset covers only five months, which is insufficient for reliable seasonality analysis.
+- Missing customer-region information may limit geographic analysis.
+- Findings depend on the documented rule that cancelled orders are excluded from completed revenue.
+- Validation checks support consistency but are not fully independent verification of the source data.
 
 ## Conclusion
 
-This project demonstrates how SQL can transform relational retail data into structured business insights. It covers revenue analysis, customer and product performance, order-level calculations, and data-quality validation.
+This project demonstrates an end-to-end workflow for transforming relational retail data into structured business insights.
 
-The results provide a foundation for further analysis using tools such as Excel and Power BI. Any business conclusions should account for the dataset's fictional nature and limitations.
+It combines SQL-based analysis, data-quality validation, AI-assisted reporting, and human review to produce a professional management report.
+
+The project highlights practical skills in SQL Server, analytical thinking, business reporting, AI-assisted workflows, and technical documentation. The findings should always be interpreted within the limitations of the fictional dataset.
