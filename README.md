@@ -192,6 +192,7 @@ The AI-assisted report is based on validated project findings and underwent huma
 ## Project Structure
 
 ```text
+
 retail-sales-sql-analysis/
 │
 ├── database/
@@ -204,6 +205,7 @@ retail-sales-sql-analysis/
 │   └── validated_findings.md
 │
 ├── validation/
+│   ├── 01_data_validation.sql
 │   └── README.md
 │
 ├── reporting/
@@ -217,6 +219,7 @@ retail-sales-sql-analysis/
 │   └── README.md
 │
 └── README.md
+
 ```
 
 ## How to Run the Project
